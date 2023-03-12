@@ -10,7 +10,7 @@ if(NOT CMAKE_STUB_FORMATTER)
 endif()
 
 set(CXX_FLAGS
-        -fno-omit-frame-pointer # linux perf
+        -fno-omit-frame-pointer 
         -Wall
         -Wextra
         -Werror

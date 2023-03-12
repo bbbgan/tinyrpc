@@ -11,138 +11,112 @@
 
 class ArithmeticService;
 
-namespace tinyrpc
-{
+namespace tinyrpc {
 
 template <typename S>
-class ArithmeticServiceStub: noncopyable
-{
-protected:
-    explicit
-    ArithmeticServiceStub(RpcServer& server)
-    {
-        static_assert(std::is_same_v<S, ArithmeticService>,
-                      "derived class name should be 'ArithmeticService'");
+class ArithmeticServiceStub : noncopyable {
+ protected:
+  explicit ArithmeticServiceStub(RpcServer& server) {
+    static_assert(std::is_same_v<S, ArithmeticService>,
+                  "derived class name should be 'ArithmeticService'");
 
-        auto service = new RpcService;
+    auto service = new RpcService;
 
-        
-service->addProcedureReturn("Add", new ProcedureReturn(
-        std::bind(&ArithmeticServiceStub::AddStub, this, _1, _2)
-        , 
-"lhs", rapidjson::kNumberType, 
-"rhs", rapidjson::kNumberType
-));
+    service->addProcedureReturn(
+        "Add",
+        new ProcedureReturn(
+            std::bind(&ArithmeticServiceStub::AddStub, this, _1, _2), "lhs",
+            rapidjson::kNumberType, "rhs", rapidjson::kNumberType));
 
+    service->addProcedureReturn(
+        "Sub",
+        new ProcedureReturn(
+            std::bind(&ArithmeticServiceStub::SubStub, this, _1, _2), "lhs",
+            rapidjson::kNumberType, "rhs", rapidjson::kNumberType));
 
-service->addProcedureReturn("Sub", new ProcedureReturn(
-        std::bind(&ArithmeticServiceStub::SubStub, this, _1, _2)
-        , 
-"lhs", rapidjson::kNumberType, 
-"rhs", rapidjson::kNumberType
-));
+    service->addProcedureReturn(
+        "Mul",
+        new ProcedureReturn(
+            std::bind(&ArithmeticServiceStub::MulStub, this, _1, _2), "lhs",
+            rapidjson::kNumberType, "rhs", rapidjson::kNumberType));
 
+    service->addProcedureReturn(
+        "Div",
+        new ProcedureReturn(
+            std::bind(&ArithmeticServiceStub::DivStub, this, _1, _2), "lhs",
+            rapidjson::kNumberType, "rhs", rapidjson::kNumberType));
 
-service->addProcedureReturn("Mul", new ProcedureReturn(
-        std::bind(&ArithmeticServiceStub::MulStub, this, _1, _2)
-        , 
-"lhs", rapidjson::kNumberType, 
-"rhs", rapidjson::kNumberType
-));
+    server.addService("Arithmetic", service);
+  }
 
+  ~ArithmeticServiceStub() = default;
 
-service->addProcedureReturn("Div", new ProcedureReturn(
-        std::bind(&ArithmeticServiceStub::DivStub, this, _1, _2)
-        , 
-"lhs", rapidjson::kNumberType, 
-"rhs", rapidjson::kNumberType
-));
-
-
-
-        server.addService("Arithmetic", service);
-    }
-
-    ~ArithmeticServiceStub() = default;
-
-private:
-    void AddStub(Value& request, const RpcDoneCallback& done)
-{
+ private:
+  void AddStub(Value& request, const RpcDoneCallback& done) {
     auto& params = request["params"];
 
     if (params.IsArray()) {
-        auto lhs = params[0].GetDouble();
-auto rhs = params[1].GetDouble();
+      auto lhs = params[0].GetDouble();
+      auto rhs = params[1].GetDouble();
 
-        convert().Add(lhs, rhs,  UserDoneCallback(request, done));
-    }
-    else {
-        auto lhs = params["lhs"].GetDouble();
-auto rhs = params["rhs"].GetDouble();
+      convert().Add(lhs, rhs, UserDoneCallback(request, done));
+    } else {
+      auto lhs = params["lhs"].GetDouble();
+      auto rhs = params["rhs"].GetDouble();
 
-        convert().Add(lhs, rhs,  UserDoneCallback(request, done));
+      convert().Add(lhs, rhs, UserDoneCallback(request, done));
     }
-}
-void SubStub(Value& request, const RpcDoneCallback& done)
-{
+  }
+  void SubStub(Value& request, const RpcDoneCallback& done) {
     auto& params = request["params"];
 
     if (params.IsArray()) {
-        auto lhs = params[0].GetDouble();
-auto rhs = params[1].GetDouble();
+      auto lhs = params[0].GetDouble();
+      auto rhs = params[1].GetDouble();
 
-        convert().Sub(lhs, rhs,  UserDoneCallback(request, done));
-    }
-    else {
-        auto lhs = params["lhs"].GetDouble();
-auto rhs = params["rhs"].GetDouble();
+      convert().Sub(lhs, rhs, UserDoneCallback(request, done));
+    } else {
+      auto lhs = params["lhs"].GetDouble();
+      auto rhs = params["rhs"].GetDouble();
 
-        convert().Sub(lhs, rhs,  UserDoneCallback(request, done));
+      convert().Sub(lhs, rhs, UserDoneCallback(request, done));
     }
-}
-void MulStub(Value& request, const RpcDoneCallback& done)
-{
+  }
+  void MulStub(Value& request, const RpcDoneCallback& done) {
     auto& params = request["params"];
 
     if (params.IsArray()) {
-        auto lhs = params[0].GetDouble();
-auto rhs = params[1].GetDouble();
+      auto lhs = params[0].GetDouble();
+      auto rhs = params[1].GetDouble();
 
-        convert().Mul(lhs, rhs,  UserDoneCallback(request, done));
-    }
-    else {
-        auto lhs = params["lhs"].GetDouble();
-auto rhs = params["rhs"].GetDouble();
+      convert().Mul(lhs, rhs, UserDoneCallback(request, done));
+    } else {
+      auto lhs = params["lhs"].GetDouble();
+      auto rhs = params["rhs"].GetDouble();
 
-        convert().Mul(lhs, rhs,  UserDoneCallback(request, done));
+      convert().Mul(lhs, rhs, UserDoneCallback(request, done));
     }
-}
-void DivStub(Value& request, const RpcDoneCallback& done)
-{
+  }
+  void DivStub(Value& request, const RpcDoneCallback& done) {
     auto& params = request["params"];
 
     if (params.IsArray()) {
-        auto lhs = params[0].GetDouble();
-auto rhs = params[1].GetDouble();
+      auto lhs = params[0].GetDouble();
+      auto rhs = params[1].GetDouble();
 
-        convert().Div(lhs, rhs,  UserDoneCallback(request, done));
+      convert().Div(lhs, rhs, UserDoneCallback(request, done));
+    } else {
+      auto lhs = params["lhs"].GetDouble();
+      auto rhs = params["rhs"].GetDouble();
+
+      convert().Div(lhs, rhs, UserDoneCallback(request, done));
     }
-    else {
-        auto lhs = params["lhs"].GetDouble();
-auto rhs = params["rhs"].GetDouble();
+  }
 
-        convert().Div(lhs, rhs,  UserDoneCallback(request, done));
-    }
-}
-
-
-private:
-    S& convert()
-    {
-        return static_cast<S&>(*this);
-    }
+ private:
+  S& convert() { return static_cast<S&>(*this); }
 };
 
-} // namespace tinyrpc
+}  // namespace tinyrpc
 
-#endif // TINYRPC_ARITHMETICSERVICESTUB_H_
+#endif  // TINYRPC_ARITHMETICSERVICESTUB_H_

@@ -9,4 +9,3 @@ add_executable(tinyrpcstub
         )
 
 target_link_libraries(tinyrpcstub )
-# install(TARGETS tinyrpcstub DESTINATION bin)
