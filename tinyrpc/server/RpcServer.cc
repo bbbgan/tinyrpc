@@ -18,7 +18,8 @@ void RpcServer::addService(std::string_view serviceName, RpcService* service) {
   services_.emplace(serviceName, service);
 }
 
-void RpcServer::handleRequest(const std::string& json, const RpcDoneCallback& done) {
+void RpcServer::handleRequest(const std::string& json,
+                              const RpcDoneCallback& done) {
   Document request;
   request.Parse(json.c_str(), json.size());
   if (request.HasParseError()) {
@@ -44,7 +45,7 @@ void RpcServer::handleSingleRequest(Value& request,
                                     const RpcDoneCallback& done) {
   // FIXME : check request is valid
   //{"jsonrpc":"2.0","method":"Arithmetic.Add","params":{"lhs":10.0,"rhs":3.0},"id":0}
-  // must ensure the request is valid 
+  // must ensure the request is valid
   LOG_TRACE("start handleSingleRequest");
 
   std::string_view methodName = request["method"].GetString();

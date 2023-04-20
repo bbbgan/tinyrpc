@@ -24,7 +24,7 @@ static void writeToFile(StubGenerator& generator) {
     perror("error");
     exit(1);
   }
-  auto stubString = generator.genStub();  
+  auto stubString = generator.genStub();
   fputs(stubString.c_str(), output);
 }
 

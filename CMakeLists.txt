@@ -5,8 +5,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-if(NOT CMAKE_STUB_FORMATTER)
-    set(CMAKE_STUB_FORMATTER echo)
+if(NOT CMAKE_CODE_FORMATTER)
+    set(CMAKE_CODE_FORMATTER echo)
 endif()
 
 set(CXX_FLAGS

@@ -1,9 +1,9 @@
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 #include <tinyrpc/server/BaseServer.h>
 #include <tinyrpc/server/RpcServer.h>
 #include <tinyrpc/util.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/document.h>
 
 #define kMaxMessageLen 65536
 
@@ -14,26 +14,32 @@ template class BaseServer<RpcServer>;
 }
 
 template <typename ProtocolServer>
-BaseServer<ProtocolServer>::BaseServer(EventLoop* loop, const InetAddress& listen)
+BaseServer<ProtocolServer>::BaseServer(EventLoop* loop,
+                                       const InetAddress& listen)
     : server_(loop, listen, "RpcServer") {
   server_.setConnectionCallback(std::bind(&BaseServer::onConnection, this, _1));
-  server_.setMessageCallback(std::bind(&BaseServer::onMessage, this, _1, _2, _3));
+  server_.setMessageCallback(
+      std::bind(&BaseServer::onMessage, this, _1, _2, _3));
 }
 
 template <typename ProtocolServer>
 void BaseServer<ProtocolServer>::onConnection(const TcpConnectionPtr& conn) {
   if (conn->connected()) {
     LOG_DEBUG("connection %s is [up]", conn->peerAddress().toIpPort().c_str());
-  } else {
-    LOG_DEBUG("connection %s is [down]", conn->peerAddress().toIpPort().c_str());
+  }
+  else {
+    LOG_DEBUG("connection %s is [down]",
+              conn->peerAddress().toIpPort().c_str());
   }
 }
 
 template <typename ProtocolServer>
-void BaseServer<ProtocolServer>::onMessage(const TcpConnectionPtr& conn, Buffer* buffer, Timestamp) {
+void BaseServer<ProtocolServer>::onMessage(const TcpConnectionPtr& conn,
+                                           Buffer* buffer, Timestamp) {
   while (true) {
     const char* crlf = buffer->findCRLF();
-    if (crlf == nullptr) break;
+    if (crlf == nullptr)
+      break;
     if (crlf == buffer->peek()) {
       buffer->retrieve(2);
       break;
@@ -45,26 +51,27 @@ void BaseServer<ProtocolServer>::onMessage(const TcpConnectionPtr& conn, Buffer*
     }
     const void* data = buffer->peek();
     int32_t bigEnd32 = *static_cast<const int32_t*>(data);
-    const int32_t contentLen = be32toh(bigEnd32);    
+    const int32_t contentLen = be32toh(bigEnd32);
 
     if (contentLen >= kMaxMessageLen)
       LOG_ERROR("message is too long  : length[%d] ", contentLen);
 
-    if (buffer->readableBytes() < headerLen + contentLen) 
+    if (buffer->readableBytes() < headerLen + contentLen)
       break;
     buffer->retrieve(headerLen);
     auto json = buffer->retrieveAsString(contentLen);
     LOG_INFO("recv %d bytes: %s", json.size(), json.c_str());
     convert().handleRequest(json, [conn, this](Value& response) {
-      if (!response.IsNull()) {  
+      if (!response.IsNull()) {
         sendResponse(conn, response);
         LOG_TRACE("BaseServer::handleMessage() %s request success",
-              conn->peerAddress().toIpPort().c_str());
-      } else {
-        LOG_TRACE("BaseServer::handleMessage() %s notify success",
-              conn->peerAddress().toIpPort().c_str());
+                  conn->peerAddress().toIpPort().c_str());
       }
-    }); 
+      else {
+        LOG_TRACE("BaseServer::handleMessage() %s notify success",
+                  conn->peerAddress().toIpPort().c_str());
+      }
+    });
   }
 }
 template <typename ProtocolServer>
