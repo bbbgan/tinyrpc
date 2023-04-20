@@ -31,7 +31,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 include_directories(
         3rd/tinynet
-        3rd/rapidjson
+        3rd/rapidjson/include/
         ${PROJECT_SOURCE_DIR}
         ${PROJECT_BINARY_DIR})
 
