@@ -1,0 +1,6 @@
+[submodule "3rd/tinynet"]
+	path = 3rd/tinynet
+	url = https://github.com/bbbgan/tinynet.git
+[submodule "3rd/rapidjson"]
+	path = 3rd/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
