@@ -13,9 +13,6 @@ void ensure(bool check, const char* errorMsg) {
 }
 }  // namespace
 
-
-
-// {"name":"Arithmetic","rpc":[{"name":"Add","params":{"lhs":1.0,"rhs":1.0},"returns":2.0},{"name":"Sub","params":{"lhs":1.0,"rhs":1.0},"returns":0.0},{"name":"Mul","params":{"lhs":2.0,"rhs":3.0},"returns":6.0},{"name":"Div","params":{"lhs":6.0,"rhs":2.0},"returns":3.0}]}
 void StubGenerator::parseProto(Value& jsonValue) {
   ensure(jsonValue.IsObject(), "ensure object");
 
@@ -33,7 +30,7 @@ void StubGenerator::parseProto(Value& jsonValue) {
     parseRpc(it->value[i]);
   }
 }
-// {"name":"Add","params":{"lhs":1.0,"rhs":1.0},"returns":2.0}
+
 void StubGenerator::parseRpc(Value& rpc) {
   ensure(rpc.IsObject(), "rpc definition must be object");
 

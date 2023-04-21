@@ -1,3 +1,4 @@
+
 #include <example/Arithmetic/ArithmeticServiceStub.h>
 #include <tinyrpc/server/RpcServer.h>
 #include <tinyrpc/server/RpcService.h>
@@ -29,7 +30,7 @@ class ArithmeticService : public ArithmeticServiceStub<ArithmeticService> {
 };
 
 int main() {
-  Logger::setLogLevel(Logger::LogLevel::TRACE);
+  Logger::setLogLevel(Logger::LogLevel::INFO);
   EventLoop loop;
   InetAddress addr(9999);
 

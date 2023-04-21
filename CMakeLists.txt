@@ -32,6 +32,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 include_directories(
         3rd/tinynet
         3rd/rapidjson/include/
+        3rd/doctest/doctest
         ${PROJECT_SOURCE_DIR}
         ${PROJECT_BINARY_DIR})
 
@@ -43,3 +44,7 @@ add_subdirectory(tinyrpc)
 if(NOT CMAKE_BUILD_NO_EXAMPLES)
     add_subdirectory(example)
 endif()
+
+# if(NOT CMAKE_BUILD_NO_TESTS)
+#     add_subdirectory(tests)
+# endif()

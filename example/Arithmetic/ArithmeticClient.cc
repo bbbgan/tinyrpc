@@ -15,18 +15,18 @@ void run(ArithmeticClientStub& client) {
 
   client.Add(lhs, rhs, [=](Value& response, bool isError, bool timeout) {
     // if (!isError) {
-    //   std::cout << lhs << "/" << rhs << "=" << response.getDouble() << "\n";
+    //   std::cout << lhs << "/" << rhs << "=" << response.GetDouble() << "\n";
     // } else if (timeout) {
     //   std::cout << "timeout\n";
     // } else {
-    //   std::cout << "response: " << response["message"].getStringView() << ": "
-    //             << response["data"].getStringView() << "\n";
+    //   std::cout << "response: " << response["message"].GetString() << ": "
+    //             << response["data"].GetString() << "\n";
     // }
   });
 }
 
 int main() {
-  Logger::setLogLevel(Logger::LogLevel::TRACE);
+  Logger::setLogLevel(Logger::LogLevel::INFO);
   EventLoop loop;
   InetAddress addr(9999);
   ArithmeticClientStub client(&loop, addr);

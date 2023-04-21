@@ -15,7 +15,6 @@ class StubGenerator {
   virtual std::string genStubClassName() = 0;
 
  protected:
-   // {"name":"Add","params":{"lhs":1.0,"rhs":1.0},"returns":2.0}
   struct RpcReturn {
     RpcReturn(const std::string& name_, Value& params_, Value& returns_)
         : name(name_) {
@@ -43,7 +42,7 @@ class StubGenerator {
     std::vector<RpcNotify> rpcNotify;
   };
 
-  ServiceInfo serviceInfo_;  //解析的json参数对象都存在这里
+  ServiceInfo serviceInfo_; 
 
  private:
   void parseProto(Value& proto);

@@ -3,7 +3,6 @@
 using namespace tinyrpc;
 
 namespace {
-// 最终生成代码
 std::string serviceStubTemplate(const std::string& macroName,
                                 const std::string& userClassName,
                                 const std::string& stubClassName,
@@ -70,7 +69,6 @@ private:
   return str;
 }
 
-// 模板
 std::string stubProcedureBindTemplate(const std::string& procedureName,
                                       const std::string& stubClassName,
                                       const std::string& stubProcedureName,
@@ -151,7 +149,6 @@ void [stubProcedureName](Value& request, const RpcDoneCallback& done)
   replaceAll(str, "[procedureName]", procedureName);
   return str;
 }
-// 得到void类型的模板
 std::string stubNotifyDefineTemplate(const std::string& paramsFromJsonArray,
                                      const std::string& paramsFromJsonObject,
                                      const std::string& stubNotifyName,
@@ -226,19 +223,17 @@ std::string argsDefineTemplate(const std::string& arg, const std::string& index,
 
 }  // namespace
 
-// 生成代码！！！！
 std::string ServiceStubGenerator::genStub() {
-  auto macroName = genMacroName();  //获得宏的名字 ARITHMETICSERVICESTUB
-  auto userClassName = genUserClassName(); // 获得用户类的名字 ArithmeticService
-  auto stubClassName = genStubClassName(); // 获得stub类的名字 ArithmeticServiceStub
-  auto& serviceName = serviceInfo_.name;  //服务名字  Arithmetic
+  auto macroName = genMacroName();  
+  auto userClassName = genUserClassName(); 
+  auto stubClassName = genStubClassName(); 
+  auto& serviceName = serviceInfo_.name;  
 
-  // cur
-  auto bindings = genStubProcedureBindings(); // 生成所有的addProcedureReturn模板
-  bindings.append(genStubNotifyBindings());  //生成bind， 并且加入到service服务
+  auto bindings = genStubProcedureBindings(); 
+  bindings.append(genStubNotifyBindings()); 
   auto definitions = genStubProcedureDefinitions();
   definitions.append(genStubNotifyDefinitions());
-  // 返回生成的代码，代码汇总
+
   return serviceStubTemplate(macroName, userClassName, stubClassName,
                              serviceName, bindings, definitions);
 }
@@ -260,10 +255,10 @@ std::string ServiceStubGenerator::genStubClassName() {
 std::string ServiceStubGenerator::genStubProcedureBindings() {
   std::string result;
   for (auto& p : serviceInfo_.rpcReturn) {
-    auto procedureName = p.name; // "Add"
-    auto stubClassName = genStubClassName(); // ArithmeticServiceStub
-    auto stubProcedureName = genStubGenericName(p); // AddStub
-    auto procedureParams = genGenericParams(p); //  "lhs", rapidjson::kNumberType, "rhs", rapidjson::kNumberType
+    auto procedureName = p.name; 
+    auto stubClassName = genStubClassName(); 
+    auto stubProcedureName = genStubGenericName(p); 
+    auto procedureParams = genGenericParams(p); 
 
     auto binding = stubProcedureBindTemplate(
         procedureName, stubClassName, stubProcedureName, procedureParams);
@@ -273,21 +268,15 @@ std::string ServiceStubGenerator::genStubProcedureBindings() {
   return result;
 }
 
-// 得到子程序的定义  //void AddStub(Value& request, const RpcDoneCallback& done)
-
 std::string ServiceStubGenerator::genStubProcedureDefinitions() {
   std::string result;
   for (auto& r : serviceInfo_.rpcReturn) {
     auto procedureName = r.name;
-    auto stubProcedureName = genStubGenericName(r); // AddStub
+    auto stubProcedureName = genStubGenericName(r); 
     if (r.params.ObjectEmpty() == false) {
       auto paramsFromJsonArray = genParamsFromJsonArray(r);
-// auto lhs = params[0].GetDouble();
-// auto rhs = params[1].GetDouble();
       auto paramsFromJsonObject = genParamsFromJsonObject(r);
-// auto lhs = params["lhs"].GetDouble();
-// auto rhs = params["rhs"].GetDouble();
-      auto procedureArgs = genGenericArgs(r); // lhs, rhs
+      auto procedureArgs = genGenericArgs(r);
       auto define = stubProcedureDefineTemplate(
           paramsFromJsonArray, paramsFromJsonObject, stubProcedureName,
           procedureName, procedureArgs);
@@ -320,7 +309,6 @@ std::string ServiceStubGenerator::genStubNotifyBindings() {
   }
   return result;
 }
-// notify类型的定义 void SubStub(Value& request, const RpcDoneCallback& done)
 std::string ServiceStubGenerator::genStubNotifyDefinitions() {
   std::string result;
   for (auto& r : serviceInfo_.rpcNotify) {
@@ -352,7 +340,6 @@ std::string ServiceStubGenerator::genStubGenericName(const Rpc& r) {
   return r.name + "Stub";
 }
 
-// "lhs", rapidjson::kNumberType, "rhs", rapidjson::kNumberType
 template <typename Rpc>
 std::string ServiceStubGenerator::genGenericParams(const Rpc& r) {
   std::string result;

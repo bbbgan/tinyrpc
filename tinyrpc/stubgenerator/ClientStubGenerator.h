@@ -1,7 +1,3 @@
-//
-// Created by frank on 18-1-24.
-//
-
 #ifndef TINYRPC_CLIENTSTUBGENERATOR_H_
 #define TINYRPC_CLIENTSTUBGENERATOR_H_
 

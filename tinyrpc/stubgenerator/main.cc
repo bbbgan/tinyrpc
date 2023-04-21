@@ -11,8 +11,6 @@
 #define GENSERVER  1
 #define GENSCLIENT 2
 
-
-
 using namespace rapidjson;
 using namespace tinyrpc;
 
